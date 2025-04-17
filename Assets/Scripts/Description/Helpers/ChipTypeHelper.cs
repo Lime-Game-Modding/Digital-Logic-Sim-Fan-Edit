@@ -46,7 +46,11 @@ namespace DLS.Description
 			{ ChipType.Bus_8Bit, "BUS-8" },
 			{ ChipType.BusTerminus_1Bit, "BUS-TERMINUS-1" },
 			{ ChipType.BusTerminus_4Bit, "BUS-TERMINUS-4" },
-			{ ChipType.BusTerminus_8Bit, "BUS-TERMINUS-8" }
+			{ ChipType.BusTerminus_8Bit, "BUS-TERMINUS-8" },
+
+			// ---- Sound ----
+			{ ChipType.Buzzer, "BUZZER" }
+
 		};
 
 		public static string GetName(ChipType type) => Names[type];

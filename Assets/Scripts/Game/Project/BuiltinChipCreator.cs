@@ -48,7 +48,10 @@ namespace DLS.Game
 				CreateBus(PinBitCount.Bit4),
 				CreateBusTerminus(PinBitCount.Bit4),
 				CreateBus(PinBitCount.Bit8),
-				CreateBusTerminus(PinBitCount.Bit8)
+				CreateBusTerminus(PinBitCount.Bit8),
+
+				// ---- Sound ----
+				CreateBuzzer()
 			};
 		}
 
@@ -340,6 +343,24 @@ namespace DLS.Game
 			};
 
 			return CreateBuiltinChipDesciption(ChipType.DisplayLED, size, col, inputPins, null, displays, true);
+		}
+
+		static ChipDescription CreateBuzzer()
+		{
+			PinDescription[] inputPins =
+			{
+				CreatePinDescription("FREQUENCY B", 0, PinBitCount.Bit8),
+				CreatePinDescription("FREQUENCY A", 1, PinBitCount.Bit8),
+				CreatePinDescription("VOLUME", 2, PinBitCount.Bit4),
+				CreatePinDescription("WAVE TYPE", 3, PinBitCount.Bit4),
+				CreatePinDescription("TOGGLE", 4),
+			};
+
+			Color col = new(0.84f, 0.13f, 0.13f);
+			float side = SubChipInstance.MinChipHeightForPins(inputPins, null);
+			Vector2 size = new(side, side);
+
+			return CreateBuiltinChipDesciption(ChipType.Buzzer, size, col, inputPins, null);
 		}
 
 

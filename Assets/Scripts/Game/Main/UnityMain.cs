@@ -2,6 +2,7 @@ using DLS.Graphics;
 using DLS.Simulation;
 using Seb.Vis;
 using Seb.Vis.UI;
+using FanEdit.Sound;
 using UnityEngine;
 
 namespace DLS.Game
@@ -10,6 +11,7 @@ namespace DLS.Game
 	{
 		public static UnityMain instance;
 		public bool openSaveDirectory;
+		public AudioSource audioSource;
 
 		[Header("Dev Settings (editor only)")]
 		public bool openInMainMenu;
@@ -33,11 +35,13 @@ namespace DLS.Game
 		public bool testbool;
 		public Anchor testAnchor;
 
+		int SoundCount;
+
 		void Awake()
 		{
 			instance = this;
 			ResetStatics();
-
+			InitSound();
 
 			Main.Init();
 
@@ -48,6 +52,11 @@ namespace DLS.Game
 		void Update()
 		{
 			Main.Update();
+            if (SoundCount <= 0)
+            {
+				SoundCount = 0;
+				audioSource.Stop();
+			}
 		}
 
 		void OnDestroy()
@@ -72,6 +81,36 @@ namespace DLS.Game
 			InteractionState.Reset();
 			CameraController.Reset();
 			WorldDrawer.Reset();
+			FanEdit.Sound.SoundManager.Reset();
 		}
-	}
+		
+		void InitSound()
+        {
+			audioSource = gameObject.AddComponent<AudioSource>();
+			audioSource.playOnAwake = false;
+			audioSource.spatialBlend = 0;
+			audioSource.Stop();
+		}
+
+		public void PlaySound(out int timeIndex)
+        {
+			timeIndex = 0;  //resets timer before playing sound
+			audioSource.Play();
+			SoundCount++;
+		}
+
+		public void StopPlaySound()
+        {
+			SoundCount--;
+        }
+
+        private void OnAudioFilterRead(float[] data, int channels)
+        {
+			if (SoundManager.activePlayers.Count == 0) { return; }
+			for(int i =0; i < SoundManager.activePlayers.Count; i++)
+			{
+				SoundManager.activePlayers[i].GenerateAudioFilterData(ref data, channels);
+			}   
+		}
+    }
 }
