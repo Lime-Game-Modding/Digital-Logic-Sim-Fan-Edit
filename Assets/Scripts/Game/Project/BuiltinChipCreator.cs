@@ -51,7 +51,12 @@ namespace DLS.Game
 				CreateBusTerminus(PinBitCount.Bit8),
 
 				// ---- Sound ----
-				CreateBuzzer()
+				CreateBuzzer(),
+
+				// ---- Toggle ----
+				CreateToggle(PinBitCount.Bit1),
+				CreateToggle(PinBitCount.Bit4),
+				CreateToggle(PinBitCount.Bit8)
 			};
 		}
 
@@ -297,7 +302,18 @@ namespace DLS.Game
 			};
 		}
 
-		static ChipDescription CreateBus(PinBitCount bitCount)
+        static Vector2 ToggleChipSize(PinBitCount bitCount)
+        {
+            return bitCount switch
+            {
+                PinBitCount.Bit1 => new Vector2(GridSize * 2, GridSize * 2),
+                PinBitCount.Bit4 => new Vector2(GridSize * 4, GridSize * 4),
+                PinBitCount.Bit8 => new Vector2(GridSize * 8, GridSize * 4),
+                _ => throw new Exception("Toggle bit count not implemented")
+            };
+        }
+
+        static ChipDescription CreateBus(PinBitCount bitCount)
 		{
 			ChipType type = bitCount switch
 			{
@@ -360,11 +376,29 @@ namespace DLS.Game
 			float side = SubChipInstance.MinChipHeightForPins(inputPins, null);
 			Vector2 size = new(side, side);
 
-			return CreateBuiltinChipDesciption(ChipType.Buzzer, size, col, inputPins, null);
+			return CreateBuiltinChipDescription(ChipType.Buzzer, size, col, inputPins, null);
 		}
 
+        static ChipDescription CreateToggle(PinBitCount bitCount)
+        {
+            ChipType type = bitCount switch
+            {
+                PinBitCount.Bit1 => ChipType.Toggle_1Bit,
+                PinBitCount.Bit4 => ChipType.Toggle_4Bit,
+                PinBitCount.Bit8 => ChipType.Toggle_8Bit,
+                _ => throw new Exception("Toggle bit count not implemented")
+            };
 
-		static ChipDescription CreateBusTerminus(PinBitCount bitCount)
+            string name = ChipTypeHelper.GetName(type);
+
+            PinDescription[] outputs = { CreatePinDescription("OUT", 0, bitCount) };
+
+            Color col = new(0.1f, 0.1f, 0.4f);
+
+            return CreateBuiltinChipDescription(type, ToggleChipSize(bitCount), col, null, outputs, hideName: true);
+        }
+
+        static ChipDescription CreateBusTerminus(PinBitCount bitCount)
 		{
 			ChipType type = bitCount switch
 			{

@@ -73,7 +73,9 @@ namespace DLS.SaveSystem
 			{
 				ChipType.Rom_256x16 => new uint[256],
 				ChipType.Key => new uint[] { 'K' },
-				_ => ChipTypeHelper.IsBusType(type) ? new uint[2] : null
+				_ => ChipTypeHelper.IsBusType(type) ? new uint[2] : ChipTypeHelper.IsToggleType(type) ? new uint[1] : null,
+
+
 			};
 
 			return new SubChipDescription

@@ -49,13 +49,20 @@ namespace DLS.Description
 			{ ChipType.BusTerminus_8Bit, "BUS-TERMINUS-8" },
 
 			// ---- Sound ----
-			{ ChipType.Buzzer, "BUZZER" }
+			{ ChipType.Buzzer, "BUZZER" },
+
+			// ---- Toggles ----
+			{ChipType.Toggle_1Bit, "1-Bit Toggle" },
+			{ChipType.Toggle_4Bit, "4-Bit Toggle" },
+			{ChipType.Toggle_8Bit, "Byte Toggle" }
 
 		};
 
 		public static string GetName(ChipType type) => Names[type];
 
 		public static bool IsBusType(ChipType type) => IsBusOriginType(type) || IsBusTerminusType(type);
+
+		public static bool IsToggleType(ChipType type) => type is ChipType.Toggle_1Bit or ChipType.Toggle_4Bit or ChipType.Toggle_8Bit;
 
 		public static bool IsBusOriginType(ChipType type) => type is ChipType.Bus_1Bit or ChipType.Bus_4Bit or ChipType.Bus_8Bit;
 
