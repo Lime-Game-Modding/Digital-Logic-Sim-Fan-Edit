@@ -27,6 +27,10 @@ namespace DLS.Graphics
 			new MenuEntry(Format(Enum.GetName(typeof(PinColour), col)), () => SetCol(col), CanSetCol)
 		).ToArray();
 
+		static readonly MenuEntry[] noteColEntries = ((NoteColour[])Enum.GetValues(typeof(NoteColour))).Select(col =>
+			new MenuEntry(Format(Enum.GetName(typeof(NoteColour), col)), () => SetCol(col), CanSetNoteCol)
+		).ToArray();
+
 
 		static readonly MenuEntry deleteEntry = new(Format("DELETE"), Delete, CanDelete);
 		static readonly MenuEntry openChipEntry = new(Format("OPEN"), OpenChip, CanOpenChip);
@@ -89,11 +93,12 @@ namespace DLS.Graphics
 			new(Format("DELETE"), Delete, CanDelete)
 		};
 
-		static readonly MenuEntry[] entries_note =
+		static readonly MenuEntry[] entries_note = new[]
 		{
-			new(Format("EDIT"), EditWire, CanEditWire),
-			new(Format("DELETE"), Delete, CanDelete)
-		};
+			new(Format("EDIT"), OpenNoteTextPopup, CanEditCurrentChip),
+			new(Format("DELETE"), Delete, CanDelete),
+			dividerMenuEntry
+		}.Concat(noteColEntries).ToArray();
 
 		static readonly MenuEntry[] entries_bottomBarChip =
 		{
@@ -342,6 +347,7 @@ namespace DLS.Graphics
 		static bool CanFlipBus() => Project.ActiveProject.CanEditViewedChip;
 
 		static bool CanSetCol() => Project.ActiveProject.CanEditViewedChip && ((PinInstance)interactionContext).IsSourcePin && UIDrawer.ActiveMenu != UIDrawer.MenuType.ChipCustomization;
+		static bool CanSetNoteCol() => Project.ActiveProject.CanEditViewedChip && UIDrawer.ActiveMenu != UIDrawer.MenuType.ChipCustomization;
 
 		static void FlipBus()
 		{
@@ -354,9 +360,20 @@ namespace DLS.Graphics
 			pin.Colour = col;
 		}
 
+		static void SetCol(NoteColour col)
+		{
+			NoteInstance note = (NoteInstance)interactionContext;
+			note.Colour = col;
+		}
+
 		static void OpenChipLabelPopup()
 		{
 			UIDrawer.SetActiveMenu(UIDrawer.MenuType.ChipLabelPopup);
+		}
+
+		static void OpenNoteTextPopup()
+		{
+			UIDrawer.SetActiveMenu(UIDrawer.MenuType.NoteTextPopup);
 		}
 
 		public static void EditWire()

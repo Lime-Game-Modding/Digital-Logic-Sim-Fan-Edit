@@ -24,6 +24,7 @@ namespace DLS.Description
 		public SubChipDescription[] SubChips;
 		public WireDescription[] Wires;
 		public DisplayDescription[] Displays;
+		public NoteDescription[] Notes;
 
 		// ---- Convenience Functions ----
 		public bool HasDisplay() => Displays != null && Displays.Length > 0;

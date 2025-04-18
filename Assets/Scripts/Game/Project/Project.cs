@@ -314,17 +314,23 @@ namespace DLS.Game
 			}
 		}
 
-		public NoteInstance CreateBlankNote(Vector2 position, string text, float width = 2f, float height = 2f)
+		public void CreateBlankNote(Vector2 position, string text)
 		{
-			// Generate a unique ID for the note
-			// Create a new NoteInstance
-			NoteInstance newNote = new NoteInstance(IDGenerator.GenerateNewElementID(editModeChip), position, text, width, height);
+			// Get all possible values of the NoteColour enum
+			Array colours = Enum.GetValues(typeof(NoteColour));
+			
+			// Select a random color
+			NoteColour randomColour = (NoteColour)colours.GetValue(UnityEngine.Random.Range(0, colours.Length));
 
-			// Add the note to the list
-			editModeChip.AddNote(newNote, true);
+			// Create the note with the random color
+			NoteDescription noteDesc = new NoteDescription(
+				IDGenerator.GenerateNewElementID(editModeChip),
+				randomColour,
+				text,
+				position
+			);
 
-			// Return the created note
-			return newNote;
+			controller.StartPlacingNote(noteDesc);
 		}
 
 		// Must be called prior to library being updated with the change
