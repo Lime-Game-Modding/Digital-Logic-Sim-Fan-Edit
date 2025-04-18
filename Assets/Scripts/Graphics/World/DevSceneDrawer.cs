@@ -76,6 +76,11 @@ namespace DLS.Graphics
 			{
 				DrawWire(wire);
 			}
+
+			foreach (WireInstance wire in controller.DuplicatedWires)
+			{
+				DrawWire(wire);
+			}
 		}
 
 		static void DrawAllPinNamesAndChipLabels()
@@ -216,7 +221,17 @@ namespace DLS.Graphics
 		{
 			if (pin.pinValueDisplayMode == PinValueDisplayMode.Off) return;
 
-			int charCount = StringHelper.CreateIntegerStringNonAlloc(pin.decimalDisplayCharBuffer, pin.GetStateDecimalDisplayValue());
+			int charCount;
+
+ 			if (pin.pinValueDisplayMode != PinValueDisplayMode.HEX)
+ 			{
+ 				charCount = StringHelper.CreateIntegerStringNonAlloc(pin.decimalDisplayCharBuffer, pin.GetStateDecimalDisplayValue());
+ 			} 
+			
+			else
+ 			{
+ 				charCount = StringHelper.CreateHexStringNonAlloc(pin.decimalDisplayCharBuffer, pin.GetStateDecimalDisplayValue());
+ 			}
 
 			FontType font = FontBold;
 			Bounds2D parentBounds = pin.BoundingBox;
@@ -291,7 +306,7 @@ namespace DLS.Graphics
 			if (isButton || desc.NameLocation != NameDisplayLocation.Hidden)
 			{
 				// Display on single line if name fits comfortably, otherwise use 'formatted' version (split across multiple lines)
-				string displayName = isButton ? subchip.activationKeyString : subchip.MultiLineName;
+				string displayName = isButton ? subchip.activationKeyString : subchip.GetUpdatedMultilineName();
 				if (Draw.CalculateTextBoundsSize(subchip.Description.Name, FontSizeChipName, FontBold).x < subchip.Size.x - PinRadius * 2.5f)
 				{
 					displayName = subchip.Description.Name;
@@ -300,6 +315,14 @@ namespace DLS.Graphics
 				bool nameCentre = desc.NameLocation == NameDisplayLocation.Centre || isButton;
 				Anchor textAnchor = nameCentre ? Anchor.TextCentre : Anchor.CentreTop;
 				Vector2 textPos = nameCentre ? pos : pos + Vector2.up * (subchip.Size.y / 2 - GridSize / 2);
+
+				if (desc.NameAlignment != NameAlignment.Centre)
+				{
+					int mult = desc.NameAlignment == NameAlignment.Right ? 1 : -1;
+					TextRenderer.BoundingBox textBounds = Draw.CalculateTextBounds(displayName, FontBold, FontSizeChipName, textPos, textAnchor);
+					textPos.x += (pos.x + desc.Size.x / 2 - textBounds.BoundsMax.x) * mult;
+				}
+
 
 				// Draw background band behind text if placed at top (so it doesn't look out of place..)
 				if (desc.NameLocation == NameDisplayLocation.Top)
@@ -708,11 +731,16 @@ namespace DLS.Graphics
 		// Wire should be highlighted if mouse is over it or if in edit mode
 		static bool ShouldHighlightWire(WireInstance wire)
 		{
+			if (InteractionState.MouseIsOverUI) return false;
 			if (wire == controller.wireToEdit) return true;
 
-			if (InteractionState.ElementUnderMousePrevFrame is WireInstance wireUnderMouse)
+			if (InteractionState.ElementUnderMousePrevFrame is WireInstance wireUnderMouse && wire == wireUnderMouse)
 			{
-				return wire == wireUnderMouse;
+				if (controller.IsCreatingWire)
+				{
+					return controller.CanCompleteWireConnection(wire, out PinInstance _);
+				}
+				return true;
 			}
 
 			return false;
@@ -791,7 +819,7 @@ namespace DLS.Graphics
 			// Can't edit first and last point in wire (unless that point connects to another wire instead of a pin)
 			int startIndex = wire.SourceConnectionInfo.IsConnectedAtWire ? 0 : 1;
 			int endIndex = wire.TargetConnectionInfo.IsConnectedAtWire ? wire.WirePointCount - 1 : wire.WirePointCount - 2;
-			
+
 			const float r = 0.07f;
 			const float rBG = r + 0.02f;
 
