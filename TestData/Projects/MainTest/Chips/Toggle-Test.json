@@ -1,0 +1,55 @@
+{
+  "Name": "Toggle-Test",
+  "NameLocation": 0,
+  "NameAlignment": 0,
+  "ChipType": 0,
+  "Size": {
+    "x": 1.775,
+    "y": 0.375
+  },
+  "Colour": {
+    "r": 0.229169667,
+    "g": 0.2566684,
+    "b": 0.145993978,
+    "a": 1
+  },
+  "InputPins":[],
+  "OutputPins":[],
+  "SubChips":[
+    {
+      "Name":"Toggle-1",
+      "ID":1630318742,
+      "Label":"",
+      "Position":{
+        "x":-1.385,
+        "y":1.125
+      },
+      "OutputPinColourInfo":[{"PinColour":0,"PinID":0}],
+      "InternalData":[0]
+    },
+    {
+      "Name":"Toggle-4",
+      "ID":2050384543,
+      "Label":"",
+      "Position":{
+        "x":-1.51,
+        "y":0.625
+      },
+      "OutputPinColourInfo":[{"PinColour":0,"PinID":0}],
+      "InternalData":[0]
+    },
+    {
+      "Name":"Toggle-8",
+      "ID":1568295533,
+      "Label":"",
+      "Position":{
+        "x":-1.76,
+        "y":0.0
+      },
+      "OutputPinColourInfo":[{"PinColour":0,"PinID":0}],
+      "InternalData":[0]
+    }
+  ],
+  "Wires":[],
+  "Displays": null
+}

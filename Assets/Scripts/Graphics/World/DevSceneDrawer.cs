@@ -469,7 +469,12 @@ namespace DLS.Graphics
 				bounds = DrawDisplay_DisplayLED(posWorld, scaleWorld, isDisconnected, isOn);
 			}
 
-			display.LastDrawBounds = bounds;
+            else if (display.DisplayType == ChipType.Toggle_1Bit)
+            {
+                bounds = DrawDisplay_Toggle_1(posWorld, scaleWorld);
+            }
+
+            display.LastDrawBounds = bounds;
 			return bounds;
 		}
 
@@ -632,7 +637,23 @@ namespace DLS.Graphics
 			return Bounds2D.CreateFromCentreAndSize(centre, Vector2.one * scale);
 		}
 
-		public static void DrawDevPin(DevPinInstance devPin)
+        public static Bounds2D DrawDisplay_Toggle_1(Vector2 centre, float scale)
+        {
+
+            // Draw background
+            Draw.Quad(centre, Vector2.one * scale, Color.black);
+
+            Vector2 pixelDrawSize = Vector2.one * scale * 0.975f;
+
+			//Color col = isDisconnected ? ActiveTheme.DisplayLEDCols[0] : (isOn ? ActiveTheme.DisplayLEDCols[2] : ActiveTheme.DisplayLEDCols[1]);
+			Color col = new(1.0f, 1.0f, 1.0f);
+
+            Draw.Quad(centre, pixelDrawSize, col);
+            return Bounds2D.CreateFromCentreAndSize(centre, Vector2.one * scale);
+        }
+
+
+        public static void DrawDevPin(DevPinInstance devPin)
 		{
 			if (devPin.BitCount == PinBitCount.Bit1)
 			{

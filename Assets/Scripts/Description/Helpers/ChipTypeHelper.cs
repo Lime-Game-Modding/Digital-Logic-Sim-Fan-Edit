@@ -52,9 +52,9 @@ namespace DLS.Description
 			{ ChipType.Buzzer, "BUZZER" },
 
 			// ---- Toggles ----
-			{ChipType.Toggle_1Bit, "1-Bit Toggle" },
-			{ChipType.Toggle_4Bit, "4-Bit Toggle" },
-			{ChipType.Toggle_8Bit, "Byte Toggle" }
+			{ChipType.Toggle_1Bit, "Toggle-1" },
+			{ChipType.Toggle_4Bit, "Toggle-4" },
+			{ChipType.Toggle_8Bit, "Toggle-8" }
 
 		};
 

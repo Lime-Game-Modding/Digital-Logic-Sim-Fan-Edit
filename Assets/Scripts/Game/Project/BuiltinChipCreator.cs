@@ -395,7 +395,21 @@ namespace DLS.Game
 
             Color col = new(0.1f, 0.1f, 0.4f);
 
-            return CreateBuiltinChipDescription(type, ToggleChipSize(bitCount), col, null, outputs, hideName: true);
+			Vector2 size = ToggleChipSize(bitCount);            
+			float displayWidth = size.y - GridSize * 0.5f; 
+
+
+            DisplayDescription[] displays =
+            {
+                new()
+                {
+                    Position = Vector2.right * PinRadius / 3 * 0,
+                    Scale = displayWidth,
+                    SubChipID = -1
+                }
+            };
+
+            return CreateBuiltinChipDescription(type, size, col, null, outputs, displays, true);
         }
 
         static ChipDescription CreateBusTerminus(PinBitCount bitCount)
