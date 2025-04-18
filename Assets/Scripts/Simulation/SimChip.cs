@@ -77,8 +77,12 @@ namespace DLS.Simulation
 					InternalState[i] = BitConverter.ToUInt32(randomBytes);
 				}
 			}
-			// Load in serialized persistent state (rom data, etc.)
-			else if (subChipDescription.InternalData is { Length: > 0 })
+            else if (ChipType is ChipType.Delay)
+            {
+                InternalState = new uint[1]; // Time until off 
+            }
+            // Load in serialized persistent state (rom data, etc.)
+            else if (subChipDescription.InternalData is { Length: > 0 })
 			{
 				InternalState = new uint[subChipDescription.InternalData.Length];
 				UpdateInternalState(subChipDescription.InternalData);

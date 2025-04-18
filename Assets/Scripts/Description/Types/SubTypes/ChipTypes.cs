@@ -8,6 +8,7 @@ namespace DLS.Description
 		Nand,
 		TriStateBuffer,
 		Clock,
+		Delay,
 
 		// ---- Memory ----
 		dev_Ram_8Bit,

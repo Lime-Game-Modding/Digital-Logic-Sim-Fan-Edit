@@ -26,6 +26,7 @@ namespace DLS.Game
 				CreateNand(),
 				CreateTristateBuffer(),
 				CreateClock(),
+				CreateDelay(),
 				// ---- Memory ----
 				dev_CreateRAM_8(),
 				CreateROM_8(),
@@ -130,7 +131,18 @@ namespace DLS.Game
 			return CreateBuiltinChipDescription(ChipType.Clock, size, col, null, outputPins);
 		}
 
-		static ChipDescription CreateBitConversionChip(ChipType chipType, PinBitCount bitCountIn, PinBitCount bitCountOut, int numIn, int numOut)
+        static ChipDescription CreateDelay()
+        {
+            Color col = new(0.44f, 0.27f, 0.35f);
+            Vector2 size = new(CalculateGridSnappedWidth(GridSize * 12), GridSize * 6);
+
+            PinDescription[] inputPins = { CreatePinDescription("DURATION", 0, PinBitCount.Bit8), CreatePinDescription("SIGNAL", 1) };
+            PinDescription[] outputPins = { CreatePinDescription("OUT", 2) };
+
+            return CreateBuiltinChipDescription(ChipType.Delay, size, col, inputPins, outputPins);
+        }
+
+        static ChipDescription CreateBitConversionChip(ChipType chipType, PinBitCount bitCountIn, PinBitCount bitCountOut, int numIn, int numOut)
 		{
 			PinDescription[] inputPins = new PinDescription[numIn];
 			PinDescription[] outputPins = new PinDescription[numOut];
