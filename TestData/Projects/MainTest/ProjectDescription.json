@@ -59,7 +59,10 @@
     "EQUALS-8",
     "DECODER-2",
     "RAM-256×8 (async)",
-    "RAM-sync"
+    "RAM-sync",
+    "Notes!",
+    "testcazc",
+    "happy birthday!"
   ],
   "StarredList":[
     {
@@ -76,6 +79,18 @@
     },
     {
       "Name":"RAM-sync",
+      "IsCollection":false
+    },
+    {
+      "Name":"Notes!",
+      "IsCollection":false
+    },
+    {
+      "Name":"testcazc",
+      "IsCollection":false
+    },
+    {
+      "Name":"happy birthday!",
       "IsCollection":false
     }
   ],

@@ -53,6 +53,9 @@ namespace DLS.Game
 				),
 				CreateChipCollection("MEMORY",
 					ChipType.Rom_256x16
+				),
+				CreateChipCollection("Fan Edit",
+					ChipType.Buzzer
 				)
 			};
 		}

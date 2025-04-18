@@ -435,6 +435,28 @@ namespace DLS.Simulation
 					chip.OutputPins[1].State.SetAllBits_NoneDisconnected(data & ByteMask);
 					break;
 				}
+
+				case ChipType.Buzzer:
+				{
+					uint nextInternalState = (uint)(chip.InputPins[4].State.FirstBitHigh() ? 1 : 0);
+					if (chip.InternalState[0] == nextInternalState)
+					{
+						break;
+					}
+					if ((nextInternalState & 1) == 1 )
+					{
+						float frequency = chip.InputPins[1].State.GetRawBits() + (chip.InputPins[0].State.GetRawBits() << 8);
+						FanEdit.Sound.SoundManager.PlayWave((FanEdit.Sound.SoundShape)(chip.InputPins[3].State.GetRawBits() % 4), frequency, (int)chip.InputPins[2].State.GetRawBits(), chip.ID);
+					}
+
+					else if ((nextInternalState & 1 )== 0)
+					{
+						FanEdit.Sound.SoundManager.StopWave(chip.ID);
+					}
+					chip.InternalState[0] = nextInternalState;
+					break;
+				}
+
 				// ---- Bus types ----
 				default:
 				{
