@@ -150,6 +150,9 @@ namespace DLS.Graphics
 							DrawSubChip(subchip, sim);
 							break;
 						}
+						case NoteInstance note:
+							DrawNote(note);
+							break;
 					}
 				}
 
@@ -202,6 +205,30 @@ namespace DLS.Graphics
 			Draw.Text(font, text, FontSizePinLabel, centre, Anchor.TextFirstLineCentre, Color.white);
 		}
 
+		public static void DrawNote(NoteInstance note)
+		{
+			Vector2 centre = note.Position + note.Size / 2;
+			int colIndex = (int)note.Colour;
+			Color col = ActiveTheme.NoteCol[colIndex];
+			// Highlight if selected
+			// Color backgroundColor = note.IsSelected ? ActiveTheme.NoteSelectedBackgroundCol : ActiveTheme.NoteBackgroundCol;
+
+			Draw.Quad(centre, note.Size + Vector2.one * ChipOutlineWidth, GetChipOutlineCol(col));
+			Draw.Quad(centre, note.Size, col);
+			Draw.Quad(centre + new Vector2(0, note.Size.y / 2 - 0.1f), new Vector2(note.Size.x, 0.2f), GetChipOutlineCol(col));
+			Draw.Text(FontBold, "NOTE", 0.15f, centre + new Vector2(-note.Size.x / 2 + 0.2f, note.Size.y / 2 - 0.1f), Anchor.TextCentre, col);
+
+
+			// Draw.Quad(centre, size, backgroundColor);
+			Draw.Text(FontBold, note.Text, FontSizeNoteText, centre, Anchor.TextCentre, Color.white);
+		
+			if (InputHelper.MouseInsideBounds_World(centre, note.Size))
+			{
+				InteractionState.NotifyElementUnderMouse(note);
+			}
+		
+		}
+
 		public static void DrawSubChipLabel(SubChipInstance chip)
 		{
 			string text = chip.Label;
@@ -220,8 +247,7 @@ namespace DLS.Graphics
 		public static void DrawPinDecValue(DevPinInstance pin)
 		{
 			if (pin.pinValueDisplayMode == PinValueDisplayMode.Off) return;
-
-			int charCount;
+      int charCount;
 
  			if (pin.pinValueDisplayMode != PinValueDisplayMode.HEX)
  			{
@@ -306,7 +332,7 @@ namespace DLS.Graphics
 			if (isButton || desc.NameLocation != NameDisplayLocation.Hidden)
 			{
 				// Display on single line if name fits comfortably, otherwise use 'formatted' version (split across multiple lines)
-				string displayName = isButton ? subchip.activationKeyString : subchip.MultiLineName;
+				string displayName = isButton ? subchip.activationKeyString : subchip.GetUpdatedMultilineName();
 				if (Draw.CalculateTextBoundsSize(subchip.Description.Name, FontSizeChipName, FontBold).x < subchip.Size.x - PinRadius * 2.5f)
 				{
 					displayName = subchip.Description.Name;
@@ -315,6 +341,14 @@ namespace DLS.Graphics
 				bool nameCentre = desc.NameLocation == NameDisplayLocation.Centre || isButton;
 				Anchor textAnchor = nameCentre ? Anchor.TextCentre : Anchor.CentreTop;
 				Vector2 textPos = nameCentre ? pos : pos + Vector2.up * (subchip.Size.y / 2 - GridSize / 2);
+
+				if (desc.NameAlignment != NameAlignment.Centre)
+				{
+					int mult = desc.NameAlignment == NameAlignment.Right ? 1 : -1;
+					TextRenderer.BoundingBox textBounds = Draw.CalculateTextBounds(displayName, FontBold, FontSizeChipName, textPos, textAnchor);
+					textPos.x += (pos.x + desc.Size.x / 2 - textBounds.BoundsMax.x) * mult;
+				}
+
 
 				// Draw background band behind text if placed at top (so it doesn't look out of place..)
 				if (desc.NameLocation == NameDisplayLocation.Top)
