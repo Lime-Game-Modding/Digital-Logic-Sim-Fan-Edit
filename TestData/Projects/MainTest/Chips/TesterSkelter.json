@@ -1,0 +1,69 @@
+{
+  "Name": "TesterSkelter",
+  "NameLocation": 0,
+  "NameAlignment": 0,
+  "ChipType": 0,
+  "Size": {
+    "x": 2.075,
+    "y": 1.75
+  },
+  "Colour": {
+    "r": 0.0,
+    "g": 0.87789917,
+    "b": 0.918327153,
+    "a": 1
+  },
+  "InputPins":[],
+  "OutputPins":[
+    {
+      "Name":"OUT",
+      "ID":1538925658,
+      "Position":{
+        "x":2.10078,
+        "y":-0.50506
+      },
+      "BitCount":4,
+      "Colour":0,
+      "ValueDisplayMode":0
+    }
+  ],
+  "SubChips":[
+    {
+      "Name":"Toggle-4",
+      "ID":1466242991,
+      "Label":"",
+      "Position":{
+        "x":-0.22708,
+        "y":-0.56155
+      },
+      "OutputPinColourInfo":[{"PinColour":0,"PinID":0}],
+      "InternalData":[0]
+    }
+  ],
+  "Wires":[
+    {
+      "SourcePinAddress":{
+        "PinID":0,
+        "PinOwnerID":1466242991
+      },
+      "TargetPinAddress":{
+        "PinID":0,
+        "PinOwnerID":1538925658
+      },
+      "ConnectionType":0,
+      "ConnectedWireIndex":-1,
+      "ConnectedWireSegmentIndex":-1,
+      "Points":[{"x":0.0,"y":0.0},{"x":0.0,"y":0.0}]
+    }
+  ],
+  "Displays":[
+    {
+      "SubChipID":150121299,
+      "Position":{
+        "x":-0.01345,
+        "y":-0.46327
+      },
+      "Scale":1.0
+    }
+  ]
+}

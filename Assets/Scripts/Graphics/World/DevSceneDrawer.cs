@@ -2,13 +2,17 @@ using System;
 using System.Collections.Generic;
 using DLS.Description;
 using DLS.Game;
+using DLS.SaveSystem;
 using DLS.Simulation;
 using Seb.Helpers;
 using Seb.Types;
 using Seb.Vis;
 using Seb.Vis.Text.Rendering;
+using Seb.Vis.UI;
 using UnityEngine;
 using static DLS.Graphics.DrawSettings;
+using static Seb.Vis.UI.ButtonTheme;
+using static UnityEngine.Random;
 using ChipTypeHelper = DLS.Description.ChipTypeHelper;
 
 namespace DLS.Graphics
@@ -469,9 +473,9 @@ namespace DLS.Graphics
 				bounds = DrawDisplay_DisplayLED(posWorld, scaleWorld, isDisconnected, isOn);
 			}
 
-            else if (display.DisplayType == ChipType.Toggle_1Bit)
+			else if (ChipTypeHelper.IsToggleType(display.DisplayType))
             {
-                bounds = DrawDisplay_Toggle_1(posWorld, scaleWorld);
+                bounds = DrawDisplay_Toggle(posWorld, scaleWorld, display.DisplayType, sim);
             }
 
             display.LastDrawBounds = bounds;
@@ -637,19 +641,140 @@ namespace DLS.Graphics
 			return Bounds2D.CreateFromCentreAndSize(centre, Vector2.one * scale);
 		}
 
-        public static Bounds2D DrawDisplay_Toggle_1(Vector2 centre, float scale)
+
+		public static Bounds2D DrawDisplay_Toggle(Vector2 centre, float scale, ChipType chipType, SimChip sim)
+		{
+			return chipType switch
+			{
+				ChipType.Toggle_1Bit => DrawDisplay_SingleToggle(centre, scale, chipType, sim),
+				_ => DrawDisplay_MultiToggle(centre, scale, chipType, sim)
+			};
+		}
+
+		public static Bounds2D DrawDisplay_MultiToggle(Vector2 centre, float scale, ChipType chipType, SimChip sim)
+		{
+
+			// Draw background
+			Vector2Int stateGridDim = chipType switch
+            {
+                ChipType.Toggle_1Bit => new Vector2Int(1, 1),
+                ChipType.Toggle_4Bit => new Vector2Int(2, 2),
+                ChipType.Toggle_8Bit => new Vector2Int(4, 2),
+                _ => new Vector2Int(1, 1)
+            };
+
+            const float squareDisplayScaleT = 0.9f;
+			Vector2 squareDisplaySize = Vector2.one * (MultiBitPinStateDisplaySquareSize * squareDisplayScaleT)* scale;
+			Vector2 inputGridSize = ((Vector2)stateGridDim * MultiBitPinStateDisplaySquareSize + Vector2.one * DevPinStateDisplayOutline)* scale;
+
+            Vector2 inputGridSizeWithoutOutline = inputGridSize - Vector2.one * DevPinStateDisplayOutline;
+
+            Vector2 topLeft = new(centre.x - inputGridSizeWithoutOutline.x / 2, centre.y + inputGridSizeWithoutOutline.y / 2);
+            Draw.Quad(centre, inputGridSize, Color.black);
+            int currBitIndex = chipType switch
+            {
+                ChipType.Toggle_1Bit => 1,
+                ChipType.Toggle_4Bit => 4,
+                ChipType.Toggle_8Bit => 8,
+                _ => 1
+            };
+
+            bool mouseOverStateGrid = InputHelper.MouseInsideBounds_World(centre, inputGridSize);
+            bool isInteractable = controller.CanInteractWithPinStateDisplay;
+
+            // If mouse over state grid, register it so that player can't draw selection box here (annoying when trying to toggle states)
+            // (individual toggles are tested for mouse input below, but this is a catch-all for when mouse is in gap in between)
+            if (mouseOverStateGrid && isInteractable) InteractionState.NotifyUnspecifiedElementUnderMouse();
+
+            for (int y = 0; y < stateGridDim.y; y++)
+            {
+                for (int x = 0; x < stateGridDim.x; x++)
+                {
+                    Vector2 pos = (topLeft + MultiBitPinStateDisplaySquareSize * new Vector2(scale*x + 0.5f, -(scale*y + 0.5f)));
+
+                    // Highlight on hover, toggle on press
+                    bool mouseOverStateToggle = InputHelper.MouseInsideBounds_World(pos, squareDisplaySize);
+                    bool isInteractingWithStateDisplay = mouseOverStateToggle && isInteractable && UIDrawer.ActiveMenu != UIDrawer.MenuType.ChipCustomization;
+
+					uint InternalState = 0;
+					if (sim!= null && sim.InternalState != null)
+					{
+						InternalState = sim.InternalState[0];
+					}
+
+                    Color stateCol = ((InternalState & (1 << currBitIndex)) == (1 << (currBitIndex))) ? ActiveTheme.StateHighCol[3] : isInteractingWithStateDisplay ? ActiveTheme.StateHoverCol[3] : ActiveTheme.StateLowCol[3];
+
+
+                    if (isInteractingWithStateDisplay)
+                    {
+                        InteractionState.NotifyUnspecifiedElementUnderMouse();
+
+                        if (InputHelper.IsMouseDownThisFrame(MouseButton.Left))
+                        {
+							sim.InternalState[0] ^= (uint)(0b1 << currBitIndex);
+                        }
+                    }
+
+                    Draw.Quad(pos, squareDisplaySize, stateCol);
+                    currBitIndex--;
+                }
+            }
+			return Bounds2D.CreateFromCentreAndSize(centre, inputGridSizeWithoutOutline);
+        }
+
+        public static Bounds2D DrawDisplay_SingleToggle(Vector2 centre, float scale, ChipType chipType, SimChip sim)
         {
 
             // Draw background
-            Draw.Quad(centre, Vector2.one * scale, Color.black);
+            Vector2Int stateGridDim = new Vector2Int(1,1);
 
-            Vector2 pixelDrawSize = Vector2.one * scale * 0.975f;
+            const float squareDisplayScaleT = 0.9f;
+            Vector2 squareDisplaySize = Vector2.one * (MultiBitPinStateDisplaySquareSize * squareDisplayScaleT) *scale;
+			Vector2 inputGridSize = Vector2.one * DevPinStateDisplayRadius; 
 
-			//Color col = isDisconnected ? ActiveTheme.DisplayLEDCols[0] : (isOn ? ActiveTheme.DisplayLEDCols[2] : ActiveTheme.DisplayLEDCols[1]);
-			Color col = new(1.0f, 1.0f, 1.0f);
+            Vector2 inputGridSizeWithoutOutline = inputGridSize;
 
-            Draw.Quad(centre, pixelDrawSize, col);
-            return Bounds2D.CreateFromCentreAndSize(centre, Vector2.one * scale);
+            Vector2 topLeft = new(centre.x - inputGridSizeWithoutOutline.x / 2, centre.y + inputGridSizeWithoutOutline.y / 2);
+            Draw.Quad(centre, squareDisplaySize	, Color.black);
+            int currBitIndex = chipType switch
+            {
+                ChipType.Toggle_1Bit => 1,
+                ChipType.Toggle_4Bit => 4,
+                ChipType.Toggle_8Bit => 8,
+                _ => 1
+            };
+
+            bool mouseOverStateGrid = InputHelper.MouseInsideBounds_World(centre, inputGridSize);
+            bool isInteractable = controller.CanInteractWithPinStateDisplay;
+
+            // If mouse over state grid, register it so that player can't draw selection box here (annoying when trying to toggle states)
+            // (individual toggles are tested for mouse input below, but this is a catch-all for when mouse is in gap in between)
+
+            // Highlight on hover, toggle on press
+            bool mouseOverStateToggle = InputHelper.MouseInsideBounds_World(centre, squareDisplaySize);
+            bool isInteractingWithStateDisplay = mouseOverStateToggle && isInteractable && UIDrawer.ActiveMenu != UIDrawer.MenuType.ChipCustomization;
+
+            uint InternalState = 0;
+            if (sim != null && sim.InternalState != null)
+            {
+                InternalState = sim.InternalState[0];
+            }
+
+            Color stateCol = ((InternalState & (1 << currBitIndex)) == (1 << (currBitIndex))) ? ActiveTheme.StateHighCol[3] : isInteractingWithStateDisplay ? ActiveTheme.StateHoverCol[3] : ActiveTheme.StateLowCol[3];
+
+            if (isInteractingWithStateDisplay)
+            {
+                InteractionState.NotifyUnspecifiedElementUnderMouse();
+
+                if (InputHelper.IsMouseDownThisFrame(MouseButton.Left))
+                {
+                    sim.InternalState[0] ^= (uint)(0b1 << currBitIndex);
+                }
+            }
+
+            Draw.Quad(centre, squareDisplaySize + 2*DevPinStateDisplayOutline*Vector2.one, ColHelper.Darken(stateCol, 1.25f));
+            Draw.Quad(centre, squareDisplaySize , stateCol);
+            return Bounds2D.CreateFromCentreAndSize(centre, inputGridSizeWithoutOutline * scale);
         }
 
 
@@ -729,6 +854,7 @@ namespace DLS.Graphics
 					bool mouseOverStateToggle = InputHelper.MouseInsideBounds_World(pos, squareDisplaySize);
 					bool isInteractingWithStateDisplay = mouseOverStateToggle && isInteractable;
 					Color stateCol = devPin.Pin.GetStateCol(currBitIndex, isInteractingWithStateDisplay);
+
 
 					if (isInteractingWithStateDisplay)
 					{
@@ -1031,5 +1157,5 @@ namespace DLS.Graphics
 
 			return (drawPriority_childWire + drawPriority_signalHigh + drawPriority_bitCount) * 100 + wire.spawnOrder;
 		}
-	}
+    }
 }

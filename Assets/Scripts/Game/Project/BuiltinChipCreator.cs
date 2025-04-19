@@ -396,7 +396,7 @@ namespace DLS.Game
             Color col = new(0.1f, 0.1f, 0.4f);
 
 			Vector2 size = ToggleChipSize(bitCount);            
-			float displayWidth = size.y - GridSize * 0.5f; 
+			float displayWidth = size.x - GridSize * 0.5f; 
 
 
             DisplayDescription[] displays =
@@ -404,7 +404,7 @@ namespace DLS.Game
                 new()
                 {
                     Position = Vector2.right * PinRadius / 3 * 0,
-                    Scale = displayWidth,
+                    Scale = 1,
                     SubChipID = -1
                 }
             };

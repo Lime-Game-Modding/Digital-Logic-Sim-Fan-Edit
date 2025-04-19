@@ -1,0 +1,42 @@
+{
+  "Name": "s",
+  "NameLocation": 0,
+  "NameAlignment": 0,
+  "ChipType": 0,
+  "Size": {
+    "x": 0.37,
+    "y": 1.25
+  },
+  "Colour": {
+    "r": 0.436779767,
+    "g": 0.91071403,
+    "b": 0.03941039,
+    "a": 1
+  },
+  "InputPins":[],
+  "OutputPins":[],
+  "SubChips":[
+    {
+      "Name":"Toggle-1",
+      "ID":1756106354,
+      "Label":"",
+      "Position":{
+        "x":-1.1324,
+        "y":-0.17686
+      },
+      "OutputPinColourInfo":[{"PinColour":0,"PinID":0}],
+      "InternalData":[0]
+    }
+  ],
+  "Wires":[],
+  "Displays":[
+    {
+      "SubChipID":1756106354,
+      "Position":{
+        "x":0.0124,
+        "y":-0.33901
+      },
+      "Scale":9.414731
+    }
+  ]
+}

@@ -457,7 +457,9 @@ namespace DLS.Simulation
 					break;
 				}
 
-				// ---- Bus types ----
+
+
+				// ---- Bus types and Toggle Types----
 				default:
 				{
 					if (ChipTypeHelper.IsBusOriginType(chip.ChipType))
@@ -465,6 +467,11 @@ namespace DLS.Simulation
 						SimPin inputPin = chip.InputPins[0];
 						chip.OutputPins[0].State.SetFromSource(inputPin.State);
 					}
+
+					if (ChipTypeHelper.IsToggleType(chip.ChipType))
+					{
+							chip.OutputPins[0].State.SetAllBits_NoneDisconnected(chip.InternalState[0]>>1);
+                    }
 
 					break;
 				}

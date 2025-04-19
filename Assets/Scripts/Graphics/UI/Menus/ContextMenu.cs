@@ -176,7 +176,7 @@ namespace DLS.Graphics
 						{
 							headerName = ChipTypeHelper.IsBusType(subChip.ChipType) ? "BUS" : subChip.Description.Name;
 							if (subChip.ChipType == ChipType.Key) activeContextMenuEntries = entries_builtinKeySubchip;
-							else if (ChipTypeHelper.IsRomType(subChip.ChipType)) activeContextMenuEntries = entries_builtinRomSubchip;
+							else if (ChipTypeHelper.	IsRomType(subChip.ChipType)) activeContextMenuEntries = entries_builtinRomSubchip;
 							else if (ChipTypeHelper.IsBusType(subChip.ChipType)) activeContextMenuEntries = entries_builtinBus;
 							else activeContextMenuEntries = entries_builtinSubchip;
 						}

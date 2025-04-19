@@ -1,0 +1,119 @@
+{
+  "Name": "Thing",
+  "NameLocation": 1,
+  "NameAlignment": 0,
+  "ChipType": 0,
+  "Size": {
+    "x": 1.77063,
+    "y": 0.875
+  },
+  "Colour": {
+    "r": 0.5942074,
+    "g": 0.560369968,
+    "b": 0.436722338,
+    "a": 1
+  },
+  "InputPins":[],
+  "OutputPins":[
+    {
+      "Name":"OUT",
+      "ID":581830061,
+      "Position":{
+        "x":1.76312,
+        "y":-0.54393
+      },
+      "BitCount":4,
+      "Colour":0,
+      "ValueDisplayMode":0
+    },
+    {
+      "Name":"OUT",
+      "ID":146972964,
+      "Position":{
+        "x":1.78185,
+        "y":-1.15285
+      },
+      "BitCount":4,
+      "Colour":0,
+      "ValueDisplayMode":0
+    }
+  ],
+  "SubChips":[
+    {
+      "Name":"sat",
+      "ID":1359348240,
+      "Label":"",
+      "Position":{
+        "x":-2.25963,
+        "y":-0.77743
+      },
+      "OutputPinColourInfo":[{"PinColour":0,"PinID":1284483596}],
+      "InternalData":null
+    },
+    {
+      "Name":"8-4BIT",
+      "ID":696874141,
+      "Label":"",
+      "Position":{
+        "x":-0.38516,
+        "y":-0.75772
+      },
+      "OutputPinColourInfo":[{"PinColour":0,"PinID":1},{"PinColour":0,"PinID":2}],
+      "InternalData":null
+    }
+  ],
+  "Wires":[
+    {
+      "SourcePinAddress":{
+        "PinID":1,
+        "PinOwnerID":696874141
+      },
+      "TargetPinAddress":{
+        "PinID":0,
+        "PinOwnerID":581830061
+      },
+      "ConnectionType":0,
+      "ConnectedWireIndex":-1,
+      "ConnectedWireSegmentIndex":-1,
+      "Points":[{"x":0.0,"y":0.0},{"x":0.0,"y":0.0}]
+    },
+    {
+      "SourcePinAddress":{
+        "PinID":2,
+        "PinOwnerID":696874141
+      },
+      "TargetPinAddress":{
+        "PinID":0,
+        "PinOwnerID":146972964
+      },
+      "ConnectionType":0,
+      "ConnectedWireIndex":-1,
+      "ConnectedWireSegmentIndex":-1,
+      "Points":[{"x":0.0,"y":0.0},{"x":0.0,"y":0.0}]
+    },
+    {
+      "SourcePinAddress":{
+        "PinID":1284483596,
+        "PinOwnerID":1359348240
+      },
+      "TargetPinAddress":{
+        "PinID":0,
+        "PinOwnerID":696874141
+      },
+      "ConnectionType":0,
+      "ConnectedWireIndex":-1,
+      "ConnectedWireSegmentIndex":-1,
+      "Points":[{"x":0.0,"y":0.0},{"x":0.0,"y":0.0}]
+    }
+  ],
+  "Displays":[
+    {
+      "SubChipID":1359348240,
+      "Position":{
+        "x":0.01782,
+        "y":-0.16695
+      },
+      "Scale":1.0
+    }
+  ]
+}

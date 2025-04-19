@@ -1,0 +1,69 @@
+{
+  "Name": "z",
+  "NameLocation": 0,
+  "NameAlignment": 0,
+  "ChipType": 0,
+  "Size": {
+    "x": 5.46645,
+    "y": 2.0
+  },
+  "Colour": {
+    "r": 0.167427808,
+    "g": 0.9530214,
+    "b": 0.5537245,
+    "a": 1
+  },
+  "InputPins":[],
+  "OutputPins":[
+    {
+      "Name":"OUT",
+      "ID":469579765,
+      "Position":{
+        "x":2.08194,
+        "y":3.00937
+      },
+      "BitCount":8,
+      "Colour":0,
+      "ValueDisplayMode":0
+    }
+  ],
+  "SubChips":[
+    {
+      "Name":"Toggle-8",
+      "ID":1851758729,
+      "Label":"",
+      "Position":{
+        "x":0.07267,
+        "y":3.00937
+      },
+      "OutputPinColourInfo":[{"PinColour":0,"PinID":0}],
+      "InternalData":[0]
+    }
+  ],
+  "Wires":[
+    {
+      "SourcePinAddress":{
+        "PinID":0,
+        "PinOwnerID":1851758729
+      },
+      "TargetPinAddress":{
+        "PinID":0,
+        "PinOwnerID":469579765
+      },
+      "ConnectionType":0,
+      "ConnectedWireIndex":-1,
+      "ConnectedWireSegmentIndex":-1,
+      "Points":[{"x":0.0,"y":0.0},{"x":0.0,"y":0.0}]
+    }
+  ],
+  "Displays":[
+    {
+      "SubChipID":1851758729,
+      "Position":{
+        "x":-1.32487,
+        "y":-0.26904
+      },
+      "Scale":2.5867238
+    }
+  ]
+}

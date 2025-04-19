@@ -6,7 +6,7 @@ namespace DLS.Graphics
 {
 	public static class WorldDrawer
 	{
-		public static void DrawWorld(Project project)
+		public static void	DrawWorld(Project project)
 		{
 			Draw.StartLayer(Vector2.zero, 1, false);
 
