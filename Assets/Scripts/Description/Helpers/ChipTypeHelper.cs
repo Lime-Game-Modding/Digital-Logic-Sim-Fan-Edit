@@ -48,9 +48,7 @@ namespace DLS.Description
 			{ ChipType.BusTerminus_4Bit, "BUS-TERMINUS-4" },
 			{ ChipType.BusTerminus_8Bit, "BUS-TERMINUS-8" },
 			{ ChipType.In_16Bit, "IN-16" },
-			{ ChipType.In_32Bit, "IN-32" },
 			{ ChipType.Out_16Bit, "OUT-16" },
-			{ ChipType.Out_32Bit, "OUT-32" },
 
 			// ---- Sound ----
 			{ ChipType.Buzzer, "BUZZER" }
