@@ -77,11 +77,6 @@ namespace DLS.Simulation
 					InternalState[i] = BitConverter.ToUInt32(randomBytes);
 				}
 			}
-      
-			else if (ChipType is ChipType.Capacitor)
-			{
-				InternalState = new uint[1]; // Time until off 
-			}
 			else if (ChipType is ChipType.Buzzer)
             {
 				InternalState = new uint[1];
