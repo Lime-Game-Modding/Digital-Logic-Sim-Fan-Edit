@@ -72,10 +72,40 @@ namespace DLS.Simulation
 			}
 		}
 
+		public void Set8BitFrom16BitSource(PinState source8bit, bool firstNibble)
+		{
+			if (firstNibble)
+			{
+				const uint mask = 0b11111111;
+				bitStates = source8bit.bitStates & mask;
+				tristateFlags = source8bit.tristateFlags & mask;
+			}
+			else
+			{
+				const uint mask = 0b1111111100000000;
+				bitStates = (source8bit.bitStates & mask) >> 8;
+				tristateFlags = (source8bit.tristateFlags & mask) >> 8;
+			}
+		}
+
+		public void Set4BitFrom16BitSource(PinState source16bit, int byt){
+			bitStates = (source16bit.bitStates >> (byt * 4)) & 0b1111;
+			tristateFlags = (source16bit.tristateFlags >> (byt * 4)) & 0b1111;
+		}
+		public void Set16BitFrom4BitSources(PinState a, PinState b, PinState c, PinState d)
+		{
+			bitStates = a.bitStates | (b.bitStates << 4) | (c.bitStates << 8) | (d.bitStates << 12);
+			tristateFlags = a.tristateFlags | (b.tristateFlags << 4) | (c.tristateFlags << 8) | (d.tristateFlags << 12);
+		}
 		public void Set8BitFrom4BitSources(PinState a, PinState b)
 		{
 			bitStates = a.bitStates | (b.bitStates << 4);
 			tristateFlags = a.tristateFlags | (b.tristateFlags << 4);
+		}
+		public void Set16BitFrom8BitSources(PinState a, PinState b)
+		{
+			bitStates = a.bitStates | (b.bitStates << 8);
+			tristateFlags = a.tristateFlags | (b.tristateFlags << 8);
 		}
 
 		public void Toggle(int bitIndex)

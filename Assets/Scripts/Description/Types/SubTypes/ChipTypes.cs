@@ -48,7 +48,12 @@ namespace DLS.Description
 		In_16Bit,
 		Out_16Bit,
 		// ---- Sound ----
-		Buzzer
-
-	}
+		Buzzer,
+        Merge_1To16Bit,
+        Merge_4To16Bit,
+        Merge_8To16Bit,
+        Split_16To1Bit,
+        Split_16To4Bit,
+        Split_16To8Bit
+    }
 }

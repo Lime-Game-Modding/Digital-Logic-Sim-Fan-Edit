@@ -23,6 +23,12 @@ namespace DLS.Description
 			{ ChipType.Merge_4To8Bit, "4-8BIT" },
 			{ ChipType.Merge_1To8Bit, "1-8BIT" },
 			{ ChipType.Merge_1To4Bit, "1-4BIT" },
+			{ ChipType.Split_16To1Bit, "16-1BIT" },
+			{ ChipType.Split_16To4Bit, "16-4BIT" },
+			{ ChipType.Split_16To8Bit, "16-8BIT" },
+			{ ChipType.Merge_1To16Bit, "1-16BIT" },
+			{ ChipType.Merge_4To16Bit, "4-16BIT" },
+			{ ChipType.Merge_8To16Bit, "8-16BIT" },
 
 			// ---- Displays -----
 			{ ChipType.DisplayRGB, "RGB DISPLAY" },
