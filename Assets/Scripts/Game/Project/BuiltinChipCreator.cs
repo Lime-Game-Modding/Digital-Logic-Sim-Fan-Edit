@@ -360,7 +360,7 @@ namespace DLS.Game
 			float side = SubChipInstance.MinChipHeightForPins(inputPins, null);
 			Vector2 size = new(side, side);
 
-			return CreateBuiltinChipDesciption(ChipType.Buzzer, size, col, inputPins, null);
+			return CreateBuiltinChipDescription(ChipType.Buzzer, size, col, inputPins, null);
 		}
 
 
